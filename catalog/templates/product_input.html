@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+          <div class="btn-group">
+            <a class="btn btn-primary my-2" href="{% url 'catalog:home' %}" role="button">Назад</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="row g-7 col-lg-8">
+        <div class="container">
+            <div class="row text-start">
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-body">
+                            <h4 class="mb-3">Новый продукт</h4>
+                            <form method="post" action="" class="form-floating">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="name">Название</label>
+                                    <input type="text" name="name" class="form-control" id="name"
+                                           placeholder="Название продукта"
+                                           required>
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="category" class="form-label">Категория</label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="">Выберите категорию</option>
+                                        <option value="None" selected>---</option>
+                                        {% for category in categories %}
+                                            <option value="{{ category.pk }}">{{ category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input name="category" style="display:none;" disabled="disabled">
+                                    <div class="invalid-feedback">
+                                        Пожалуйста, выберите категорию.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description">Описание</label>
+                                    <textarea name="description" class="form-control" id="description"
+                                              placeholder="Описание продукта"
+                                              ></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price">Цена</label>
+                                    <input type="number" step="1" min="0" value="0" name="price"
+                                           class="form-control"
+                                           id="price"
+                                           placeholder="Цена за единицу продукта, $" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Файл с изображением</label>
+                                    <input class="form-control" type="file" id="image" name="image" accept="image/png, image/jpeg"
+                                           placeholder="Изображение продукта"
+                                           >
+                                </div>
+                                <button type="submit" class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:home' %}">Сохранить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

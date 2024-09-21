@@ -38,14 +38,27 @@
                 </div>
             </div>
         </div>
+        {% for product in products %}
+            <div class="col-3">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ product.name}}</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstled mt-3 mb-4 text-start m-3">
+                            <p>
+                                {{ product.description }}
+                            </p>
+                        </ul>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
-            <!--<div class="col-12 col-md">
-                SkyStore
-                <small class="d-block mb-3 text-muted">&copy; 2023</small>
-            </div>-->
             <div class="col-6 col-md">
                 <h5>Категории</h5>
                 <ul class="list-unstyled text-small">
