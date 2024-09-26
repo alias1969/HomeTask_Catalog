@@ -1,8 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 from catalog.models import Product, Category
-import wget
-from config.settings import MEDIA_URL
-from django.core.paginator import Paginator
 
 
 def home(request):
@@ -10,13 +7,6 @@ def home(request):
     products = Product.objects.all()
     return render(request, "products_list.html", context={"products": products})
     # return render(request, "home.html", context={'products':products})
-
-
-def product_list(request):
-    """Контроллер вывода списка продукции"""
-    products = Product.objects.all()
-    return render(request, "products_list.html", context={"products": products})
-
 
 def product_detail(request, pk):
     """Контроллер вывода карточки продукции"""
@@ -38,11 +28,9 @@ def product_input(request):
             product["category"] = Category.objects.get(pk=int(category_pk))
 
         # скачаем на сервер изображение и сохраним в media
-        # не получислоь(
-        image = request.POST.get("image")
-        # if image is not None:
-        #    image_path = wget.download(image, f'{MEDIA_URL}products/{image}')
-        #    product['image'] = image_path
+        image = request.FILES.get("image")
+        if image is not None:
+           product['image'] = image
 
         # записывем данные в Product
         Product.objects.create(**product)
