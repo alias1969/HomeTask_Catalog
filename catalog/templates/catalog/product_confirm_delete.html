@@ -1,0 +1,38 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row g-7 col-lg-8">
+        <div class="container">
+            <div class="row text-start">
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-header">
+                            Удаление карточки продукта
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title"> {{ object }}</h4>
+                            <h6 class="card-subtitle mb-2 text-muted">Категория: {{ object.category }}</h6>
+                            <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+                                <div class="row">
+                                    <p class="card-text">Вы действительно хотите удалить карточку продукта?</p>
+                                    <p class="card-text"></p>
+                                </div>
+                                <div class="row"></div>
+                                {% csrf_token %}
+                                <div class="button-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        Удалить
+                                    </button>
+                                    <a class="btn btn-btn-primary" href="{% url 'catalog:home'%}" role="button">
+                                        Отмена
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

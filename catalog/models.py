@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.expressions import result
+
 
 NULLABLE = {"blank": True, "null": True}
 
@@ -94,3 +94,5 @@ class Contacts(models.Model):
     class Meta:
         verbose_name = "Контактные данные"
         verbose_name_plural = "Контактные данные"
+
+
