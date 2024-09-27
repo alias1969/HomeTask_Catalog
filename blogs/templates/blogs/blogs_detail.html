@@ -14,12 +14,9 @@
             {% if object.preview %}
                         <img class="card-img-top" src="{{ object.preview|media_filter }}"
                              style="max-width: 600px; max-height: 400px">
-                        {% else %}
-                        <img src="{% static 'images/image_by_default.jpeg' %}"
-                             style="max-width: 600px; max-height: 400px">
                         {% endif %}
             <div class="card-body">
-              <h5 class="card-title">{{ blogs.name }}</h5>
+              <h5 class="card-title">{{ object.name }}</h5>
               <p class="card-subtitle">{{ object.slug }}</p>
               <p class="card-text">{{ object.content }}</p>
               <p class="blockquote-footer">Просмотров: {{ object.count_views }}</p>
