@@ -1,0 +1,44 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="album py-5 bg-light">
+    <div class="container">
+
+       {{ object.name }}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="card shadow-sm">
+            {% if object.preview %}
+                        <img class="card-img-top" src="{{ object.preview|media_filter }}"
+                             style="max-width: 600px; max-height: 400px">
+                        {% else %}
+                        <img src="{% static 'images/image_by_default.jpeg' %}"
+                             style="max-width: 600px; max-height: 400px">
+                        {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ blogs.name }}</h5>
+              <p class="card-subtitle">{{ object.slug }}</p>
+              <p class="card-text">{{ object.content }}</p>
+              <p class="blockquote-footer">Просмотров: {{ object.count_views }}</p>
+               <p class="blockquote-footer">Дата создания: {{ object.created_at }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a class="btn btn-primary" href="{% url 'blogs:blogs_list' %}" role="button">Назад</a>
+                </div>
+                {% if object.is_published %}
+                  <small class="blockquote-footer">Опубликовано</small>
+                {% else %}
+                  <small class="blockquote-footer">Не опубликовано</small>
+                {% endif %}
+                <p class="card-text">{{ object.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -82,5 +82,45 @@
       "name": "Social media",
       "description": "Социальные сети"
     }
+  },
+  {
+    "model": "catalog.contacts",
+    "pk": 1,
+    "fields": {
+      "type_contact": "Страна",
+      "value_contact": "USA"
+    }
+  },
+    {
+    "model": "catalog.contacts",
+    "pk": 2,
+    "fields": {
+      "type_contact": "ИНН",
+      "value_contact": "91-1144442"
+    }
+  },
+    {
+    "model": "catalog.contacts",
+    "pk": 3,
+    "fields": {
+      "type_contact": "Адрес",
+      "value_contact": "Redmond,WA,98052-6399"
+    }
+  },
+    {
+    "model": "catalog.contacts",
+    "pk": 4,
+    "fields": {
+      "type_contact": "Телефон",
+      "value_contact": "+1 650 100-10-10"
+    }
+  },
+    {
+    "model": "catalog.contacts",
+    "pk": 5,
+    "fields": {
+      "type_contact": "Email",
+      "value_contact": "info@skystore.com"
+    }
   }
 ]

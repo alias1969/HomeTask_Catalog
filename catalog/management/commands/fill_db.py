@@ -1,7 +1,6 @@
 from django.core.management import BaseCommand
 import json
-import psycopg2
-from catalog.models import Category, Product
+from catalog.models import Category, Product, Contacts
 
 
 class Command(BaseCommand):
@@ -17,8 +16,9 @@ class Command(BaseCommand):
         products = [
             value["fields"] for value in values if value["model"] == "catalog.product"
         ]
+        contacts = [value["fields"] for value in values if value["model"] == "catalog.contacts"]
 
-        return categories, products
+        return categories, products, contacts
 
     def handle(self, *args, **options):
         """Заполнить данные моделей Product и Category"""
@@ -26,11 +26,20 @@ class Command(BaseCommand):
         # удалим все данные
         Category.objects.all().delete()
         Product.objects.all().delete()
+        Contacts.objects.all().delete()
 
         product_for_create = []
+        contact_for_create = []
 
-        # Получим категории и продукты из json
-        categories, products = Command.json_read_data()
+        # Получим контакты, категории и продукты из json
+        categories, products, contacts = Command.json_read_data()
+
+        #запишем контакты
+        for contact in contacts:
+            contact_for_create.append(Contacts(**contact))
+
+        Contacts.objects.bulk_create(contact_for_create)
+
 
         # запишем данные категорий
         for category in categories:
