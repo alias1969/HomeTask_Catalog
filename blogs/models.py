@@ -5,7 +5,7 @@ NULLABLE = {"blank": True, "null": True}
 
 
 class Blogs(models.Model):
-    """ Класс для хранения блоговой записи"""
+    """Класс для хранения блоговой записи"""
 
     headline = models.CharField(
         max_length=150,
@@ -36,7 +36,7 @@ class Blogs(models.Model):
 
     is_published = models.BooleanField(verbose_name="Опубликовано", default=False)
 
-    count_views = models.IntegerField(verbose_name="Просмотров", default = 0,**NULLABLE)
+    count_views = models.IntegerField(verbose_name="Просмотров", default=0, **NULLABLE)
 
     def __str__(self):
         return f"{self.headline}"
@@ -44,4 +44,3 @@ class Blogs(models.Model):
     class Meta:
         verbose_name = "Блог"
         verbose_name_plural = "Блоги"
-

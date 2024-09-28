@@ -16,7 +16,9 @@ class Command(BaseCommand):
         products = [
             value["fields"] for value in values if value["model"] == "catalog.product"
         ]
-        contacts = [value["fields"] for value in values if value["model"] == "catalog.contacts"]
+        contacts = [
+            value["fields"] for value in values if value["model"] == "catalog.contacts"
+        ]
 
         return categories, products, contacts
 
@@ -34,12 +36,11 @@ class Command(BaseCommand):
         # Получим контакты, категории и продукты из json
         categories, products, contacts = Command.json_read_data()
 
-        #запишем контакты
+        # запишем контакты
         for contact in contacts:
             contact_for_create.append(Contacts(**contact))
 
         Contacts.objects.bulk_create(contact_for_create)
-
 
         # запишем данные категорий
         for category in categories:

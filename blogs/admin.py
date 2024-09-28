@@ -6,4 +6,4 @@ from blogs.models import Blogs
 
 @admin.register(Blogs)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'headline', 'content')
+    list_display = ("pk", "headline", "content")

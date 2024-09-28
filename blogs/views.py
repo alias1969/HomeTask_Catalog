@@ -3,29 +3,38 @@ from audioop import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.text import slugify
-from django.views.generic import ListView, DeleteView, CreateView, UpdateView, DetailView
+from django.views.generic import (
+    ListView,
+    DeleteView,
+    CreateView,
+    UpdateView,
+    DetailView,
+)
 
 from blogs.models import Blogs
 
 
 class BlogsListView(ListView):
-    """ Страница списка блогов """
+    """Страница списка блогов"""
+
     model = Blogs
+    paginate_by: int = 6
 
     def get_queryset(self, *args, **kwargs):
-        """ Получает все публикации блога, которые опубликованы"""
+        """Получает все публикации блога, которые опубликованы"""
         queryset = super().get_queryset(*args, **kwargs)
         queryset = queryset.filter(is_published=True)
         return queryset
 
 
 class BlogsDetailView(DetailView):
-    """ Страница просмотра блога"""
+    """Страница просмотра блога"""
+
     model = Blogs
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['headline'] = Blogs.objects.get(pk=self.kwargs['pk'])
+        context_data["headline"] = Blogs.objects.get(pk=self.kwargs["pk"])
         return context_data
 
     def get_object(self, **kwargs):
@@ -40,13 +49,14 @@ class BlogsDetailView(DetailView):
 
 
 class BlogsCreateView(CreateView):
-    """ Страница создания блога """
+    """Страница создания блога"""
+
     model = Blogs
-    fields = ('headline', 'content', 'preview')
-    success_url = reverse_lazy('blogs:blogs_list')
+    fields = ("headline", "content", "preview")
+    success_url = reverse_lazy("blogs:blogs_list")
 
     def form_valid(self, form):
-        """ Проверяет данные на валидность и генерирует slug """
+        """Проверяет данные на валидность и генерирует slug"""
         if form.is_valid():
             new_blog = form.save()
             new_blog.slug = slugify(new_blog.headline)
@@ -55,22 +65,26 @@ class BlogsCreateView(CreateView):
 
 
 class BlogsUpdateView(UpdateView):
-    """ Страница редактирования блога"""
+    """Страница редактирования блога"""
+
     model = Blogs
-    fields = ('headline', 'content', 'preview')
-    success_url = reverse_lazy('blogs:blogs_list')
+    fields = ("headline", "content", "preview")
+    success_url = reverse_lazy("blogs:blogs_list")
 
 
 class BlogsDeleteView(DeleteView):
-    """ Страница удаления блока """
-    model = Blogs
-    success_url = reverse_lazy('blogs:blogs_list')
+    """Страница удаления блока"""
 
-def toggle_activity(request, pk):
+    model = Blogs
+    success_url = reverse_lazy("blogs:blogs_list")
+
+
+def toggle_published(request, pk):
     blog = get_object_or_404(Blogs, pk=pk)
-    blog.is_published = not blog.is_published
+    if blog.is_published:
+        blog.is_published = False
+    else:
+        blog.is_published = True
     blog.save()
 
-    return redirect(reverse('blogs: blogs_list'))
-
-
+    return redirect(reverse("blogs: blogs_list"))
