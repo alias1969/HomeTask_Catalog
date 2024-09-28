@@ -36,6 +36,8 @@ class BlogsDetailView(DetailView):
             object.count_views += 1
         object.save()
 
+        return object
+
 
 class BlogsCreateView(CreateView):
     """ Страница создания блога """
@@ -47,7 +49,7 @@ class BlogsCreateView(CreateView):
         """ Проверяет данные на валидность и генерирует slug """
         if form.is_valid():
             new_blog = form.save()
-            new_blog.slug = slugify(new_blog.title)
+            new_blog.slug = slugify(new_blog.headline)
             new_blog.save()
         return super().form_valid(form)
 
