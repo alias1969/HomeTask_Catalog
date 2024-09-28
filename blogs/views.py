@@ -1,7 +1,7 @@
 from audioop import reverse
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.views.generic import (
     ListView,
@@ -87,4 +87,5 @@ def toggle_published(request, pk):
         blog.is_published = True
     blog.save()
 
-    return redirect(reverse("blogs: blogs_list"))
+    return redirect(reverse("blogs:blogs_list"))
+

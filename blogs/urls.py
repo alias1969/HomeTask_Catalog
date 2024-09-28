@@ -20,9 +20,9 @@ app_name = BlogsConfig.name
 
 urlpatterns = [
     path("blogs", BlogsListView.as_view(), name="blogs_list"),
-    path("blogs/<int:pk>/", BlogsDetailView.as_view(), name="blogs_detail"),
-    path("blogs/create", BlogsCreateView.as_view(), name="blogs_create"),
-    path("blogs/<int:pk>/update/", BlogsUpdateView.as_view(), name="blogs_update"),
-    path("blogs/<int:pk>/delete/", BlogsDeleteView.as_view(), name="blogs_delete"),
-    path("blog/<int:pk>/published", toggle_published, name="blogs_published"),
+    path("<int:pk>/", BlogsDetailView.as_view(), name="blogs_detail"),
+    path("create", BlogsCreateView.as_view(), name="blogs_create"),
+    path("<int:pk>/update/", BlogsUpdateView.as_view(), name="blogs_update"),
+    path("<int:pk>/delete/", BlogsDeleteView.as_view(), name="blogs_delete"),
+    path("<int:pk>/published", toggle_published, name="blogs_published"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
