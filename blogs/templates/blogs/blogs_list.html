@@ -4,14 +4,21 @@
 <main class="container">
     <div class="row">
         <div class="col-12">
-                <div class="btn-group">
-                    <a class="btn btn-primary my-2" href="{% url 'blogs:blogs_create' %}" role="button">Добавить
-                        новый блог</a>
-                </div>
-            </div>
+            <p>
+                <a href="{% url 'blogs:blogs_list' %}" class="btn btn-primary my-2">Опубликованные
+                    блоги</a>
+                <a href="{% url 'blogs:blogs_list_not_published' %}" class="btn btn-secondary my-2">Неопубликованные
+                    блоги</a>
+            </p>
         </div>
-
-<div class="row mb-2">
+    </div>
+    <div class="col-12">
+        <div class="btn-group">
+            <a class="btn btn-primary my-2" href="{% url 'blogs:blogs_create' %}" role="button">Добавить
+                новый блог</a>
+        </div>
+    </div>
+    <div class="row mb-2">
     {% for object in object_list %}
     <div class="col-md-6">
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -31,6 +38,11 @@
                     <a class="btn btn-link" href="{% url 'blogs:blogs_detail' object.pk %}" role="button">Открыть</a>
                     <a class="btn btn-link" href="{% url 'blogs:blogs_update' object.pk %}" role="button">Редактировать</a>
                     <a class="btn btn-link" href="{% url 'blogs:blogs_delete' object.pk %}" role="button">Удалить</a>
+                    {% if object.is_published %}
+                        <a href="{% url 'blogs:toggle_published' object.pk %}">Снять с публикации</a>
+                    {% else %}
+                        <a href="{% url 'blogs:toggle_published' object.pk %}">Опубликовать</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
