@@ -20,20 +20,13 @@ class BlogsListView(ListView):
     model = Blogs
 
     def get_queryset(self, *args, **kwargs):
-        """Получает все блоги, которые опубликованы"""
+        """Получает блоги, которые опубликованы"""
         queryset = super().get_queryset(*args, **kwargs)
-        queryset = queryset.filter(is_published=True)
-        return queryset
+        if self.request.GET.get('pub') == 'True':
+            queryset = queryset.filter(is_published=True)
+            return queryset
 
-
-class BlogsListViewNotPublished(ListView):
-    """Страница списка блогов"""
-    model = Blogs
-
-    def get_queryset(self, *args, **kwargs):
-        """Получает все блоги, которые не опубликованы"""
-        queryset = super().get_queryset(*args, **kwargs)
-        queryset = queryset.filter(is_published=False)
+        # все блоги
         return queryset
 
 

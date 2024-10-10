@@ -5,10 +5,11 @@
     <div class="row">
         <div class="col-12">
             <p>
-                <a href="{% url 'blogs:blogs_list' %}" class="btn btn-primary my-2">Опубликованные
+                <a href="{% url 'blogs:blogs_list' %}?pub=True" class="btn btn-primary my-2">Опубликованные
                     блоги</a>
-                <a href="{% url 'blogs:blogs_list_not_published' %}" class="btn btn-secondary my-2">Неопубликованные
+                <a href="{% url 'blogs:blogs_list' %}?pub=False" class="btn btn-primary my-2">Все
                     блоги</a>
+
             </p>
         </div>
     </div>
