@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.db import models
 
 
@@ -120,5 +122,21 @@ class Version(models.Model):
         verbose_name = "Версия продукта"
         verbose_name_plural = "Версии продуктов"
 
+        ordering = ["product", "number", "name", "is_current_version"]
+        constraints = [
+            models.UniqueConstraint(fields=['product', 'is_current_version'],
+                                condition=models.Q(is_current_version=True),
+                                name='unique_current_version')
+        ]
+
     def __str__(self):
         return f'{self.name}'
+
+    def save(self, *args, **kwargs):
+        if not self.number:
+            max_number = Version.objects.filter(product=self.product).aggregate(models.Max('number'))[
+                'number__max']
+            self.number = (max_number + 1) if max_number is not None else 1
+            if self.is_current_version:
+                Version.objects.filter(product=self.product, is_current_version=True).update(is_current_version=False)
+            super().save(*args, **kwargs)
