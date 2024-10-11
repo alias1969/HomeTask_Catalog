@@ -49,6 +49,9 @@ class Product(models.Model):
         verbose_name_plural = "Продукты"
         ordering = ["category", "name"]
 
+    def get_current_version(self):
+        return self.versions.filter(is_current_version=True).first()
+
 
 class Category(models.Model):
     """Класс модели категории продуктов"""
@@ -94,3 +97,28 @@ class Contacts(models.Model):
     class Meta:
         verbose_name = "Контактные данные"
         verbose_name_plural = "Контактные данные"
+
+
+class Version(models.Model):
+    """ Класс версий продукта"""
+
+    product = models.ForeignKey(
+        "Product",
+        on_delete=models.CASCADE,
+        verbose_name="Версия",
+        related_name="versions",
+    )
+    name = models.CharField(
+        max_length=150,
+        verbose_name="Название версии",
+        help_text="Введите название версии"
+    )
+    number = models.IntegerField(verbose_name="Номер версии", default=0,)
+    is_current_version = models.BooleanField(verbose_name="Текущая версия")
+
+    class Meta:
+        verbose_name = "Версия продукта"
+        verbose_name_plural = "Версии продуктов"
+
+    def __str__(self):
+        return f'{self.name}'
