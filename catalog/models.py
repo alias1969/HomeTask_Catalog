@@ -1,5 +1,6 @@
 from itertools import product
 
+from PIL.ImageCms import versions
 from django.db import models
 
 
@@ -54,6 +55,16 @@ class Product(models.Model):
     def get_current_version(self):
         return self.versions.filter(is_current_version=True).first()
 
+    def save(self, *args, **kwargs):
+        """Сохранение версии продукта"""
+        # Запишем новую версию продукта
+        version = Version()
+        version.product = self
+        version.is_current_version=True
+
+        version.save(*args, **kwargs)
+
+        super().save(*args, **kwargs)
 
 class Category(models.Model):
     """Класс модели категории продуктов"""
@@ -122,7 +133,7 @@ class Version(models.Model):
         verbose_name = "Версия продукта"
         verbose_name_plural = "Версии продуктов"
 
-        ordering = ["product", "number", "name", "is_current_version"]
+        ordering = ["product", "-number", "name", "is_current_version"]
         constraints = [
             models.UniqueConstraint(fields=['product', 'is_current_version'],
                                 condition=models.Q(is_current_version=True),
@@ -133,10 +144,19 @@ class Version(models.Model):
         return f'{self.name}'
 
     def save(self, *args, **kwargs):
+        """Сохранение версии продукта"""
+        #получаем максимальный номер версии продукта и +1
         if not self.number:
             max_number = Version.objects.filter(product=self.product).aggregate(models.Max('number'))[
                 'number__max']
             self.number = (max_number + 1) if max_number is not None else 1
-            if self.is_current_version:
-                Version.objects.filter(product=self.product, is_current_version=True).update(is_current_version=False)
-            super().save(*args, **kwargs)
+
+        # установим название версии, если пользователь не ввел его вручную
+        if not self.name:
+            self.name = f'{str(self.product)}: версия {self.number}'
+
+        # Ставим фильтр на вывод только текущей версии продукта
+        if self.is_current_version:
+            Version.objects.filter(product=self.product, is_current_version=True).update(is_current_version=False)
+
+        super().save(*args, **kwargs)

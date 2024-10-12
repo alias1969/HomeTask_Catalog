@@ -37,15 +37,16 @@
 
                     <div class="card-body">
                         <h5 class="card-title">{{ product }}</h5>
-                        {% with active_version=product.get_current_version %}
-                        {% if active_version %}
-                        Версия: {{ active_version.name }}
-                        {% else %}
-                        Нет доступной активной версии.
-                        {% endif %}
-                        {% endwith %}
-
-                        <p class="text-secondary">Категория: {{ product.category }}</p>
+                        <p class="text-secondary">
+                            {% with active_version=product.get_current_version %}
+                            {% if active_version %}
+                            Версия: {{ active_version.name }}
+                            {% else %}
+                            Нет текущей версий.
+                            {% endif %}
+                            {% endwith %}
+                        </p>
+                        <p class="card-text">Категория: {{ product.category }}</p>
                         <small class="fs-2">{{ product.price }} $</small>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
