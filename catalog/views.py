@@ -18,9 +18,6 @@ class ProductListView(ListView):
 
     model = Product
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     """ получите данные о версиях продукта и выберите текущую (активную) версию для продукта."""
-
 
 class ProductDetailView(DetailView):
     """Страница карточки продукта"""
