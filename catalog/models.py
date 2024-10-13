@@ -55,16 +55,16 @@ class Product(models.Model):
     def get_current_version(self):
         return self.versions.filter(is_current_version=True).first()
 
-    def save(self, *args, **kwargs):
-        """Сохранение версии продукта"""
-        # Запишем новую версию продукта
-        version = Version()
-        version.product = self
-        version.is_current_version=True
-
-        version.save(*args, **kwargs)
-
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """Сохранение версии продукта"""
+    #     # Запишем новую версию продукта
+    #     version = Version()
+    #     version.product = self
+    #     version.is_current_version=True
+    #
+    #     version.save(*args, **kwargs)
+    #
+    #     super().save(*args, **kwargs)
 
 class Category(models.Model):
     """Класс модели категории продуктов"""
@@ -146,14 +146,14 @@ class Version(models.Model):
     def save(self, *args, **kwargs):
         """Сохранение версии продукта"""
         #получаем максимальный номер версии продукта и +1
-        if not self.number:
-            max_number = Version.objects.filter(product=self.product).aggregate(models.Max('number'))[
-                'number__max']
-            self.number = (max_number + 1) if max_number is not None else 1
+        # if not self.number:
+        #     max_number = Version.objects.filter(product=self.product).aggregate(models.Max('number'))[
+        #         'number__max']
+        #     self.number = (max_number + 1) if max_number is not None else 1
 
         # установим название версии, если пользователь не ввел его вручную
-        if not self.name:
-            self.name = f'{str(self.product)}: версия {self.number}'
+        # if not self.name:
+        #     self.name = f'{str(self.product)}: версия {self.number}'
 
         # Ставим фильтр на вывод только текущей версии продукта
         if self.is_current_version:
