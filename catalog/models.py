@@ -66,6 +66,7 @@ class Product(models.Model):
     #
     #     super().save(*args, **kwargs)
 
+
 class Category(models.Model):
     """Класс модели категории продуктов"""
 
@@ -113,7 +114,7 @@ class Contacts(models.Model):
 
 
 class Version(models.Model):
-    """ Класс версий продукта"""
+    """Класс версий продукта"""
 
     product = models.ForeignKey(
         "Product",
@@ -124,9 +125,12 @@ class Version(models.Model):
     name = models.CharField(
         max_length=150,
         verbose_name="Название версии",
-        help_text="Введите название версии"
+        help_text="Введите название версии",
     )
-    number = models.IntegerField(verbose_name="Номер версии", default=0,)
+    number = models.IntegerField(
+        verbose_name="Номер версии",
+        default=0,
+    )
     is_current_version = models.BooleanField(verbose_name="Текущая версия")
 
     class Meta:
@@ -135,17 +139,19 @@ class Version(models.Model):
 
         ordering = ["product", "-number", "name", "is_current_version"]
         constraints = [
-            models.UniqueConstraint(fields=['product', 'is_current_version'],
-                                condition=models.Q(is_current_version=True),
-                                name='unique_current_version')
+            models.UniqueConstraint(
+                fields=["product", "is_current_version"],
+                condition=models.Q(is_current_version=True),
+                name="unique_current_version",
+            )
         ]
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
     def save(self, *args, **kwargs):
         """Сохранение версии продукта"""
-        #получаем максимальный номер версии продукта и +1
+        # получаем максимальный номер версии продукта и +1
         # if not self.number:
         #     max_number = Version.objects.filter(product=self.product).aggregate(models.Max('number'))[
         #         'number__max']
@@ -157,6 +163,8 @@ class Version(models.Model):
 
         # Ставим фильтр на вывод только текущей версии продукта
         if self.is_current_version:
-            Version.objects.filter(product=self.product, is_current_version=True).update(is_current_version=False)
+            Version.objects.filter(
+                product=self.product, is_current_version=True
+            ).update(is_current_version=False)
 
         super().save(*args, **kwargs)

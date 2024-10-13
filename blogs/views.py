@@ -17,12 +17,13 @@ from blogs.models import Blogs
 
 class BlogsListView(ListView):
     """Страница списка блогов"""
+
     model = Blogs
 
     def get_queryset(self, *args, **kwargs):
         """Получает блоги, которые опубликованы"""
         queryset = super().get_queryset(*args, **kwargs)
-        if self.request.GET.get('pub') == 'True':
+        if self.request.GET.get("pub") == "True":
             queryset = queryset.filter(is_published=True)
             return queryset
 
@@ -32,6 +33,7 @@ class BlogsListView(ListView):
 
 class BlogsDetailView(DetailView):
     """Страница просмотра блога"""
+
     model = Blogs
 
     def get_context_data(self, **kwargs):
@@ -40,7 +42,7 @@ class BlogsDetailView(DetailView):
         return context_data
 
     def get_object(self, **kwargs):
-        """ Счетчик просмотров"""
+        """Счетчик просмотров"""
         object = super().get_object(**kwargs)
         if object.count_views is None:
             object.count_views = 1
@@ -53,6 +55,7 @@ class BlogsDetailView(DetailView):
 
 class BlogsCreateView(CreateView):
     """Страница создания блога"""
+
     model = Blogs
     fields = ("headline", "content", "preview")
     success_url = reverse_lazy("blogs:blogs_list")
@@ -68,6 +71,7 @@ class BlogsCreateView(CreateView):
 
 class BlogsUpdateView(UpdateView):
     """Страница редактирования блога"""
+
     model = Blogs
     fields = ("headline", "content", "preview")
     success_url = reverse_lazy("blogs:blogs_detail")
@@ -81,18 +85,19 @@ class BlogsUpdateView(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        """ В случае успеха переходим на просмотр блога"""
-        return reverse('blogs:blogs_detail', args=[self.kwargs.get('pk')])
+        """В случае успеха переходим на просмотр блога"""
+        return reverse("blogs:blogs_detail", args=[self.kwargs.get("pk")])
 
 
 class BlogsDeleteView(DeleteView):
     """Страница удаления блока"""
+
     model = Blogs
     success_url = reverse_lazy("blogs:blogs_list")
 
 
 def toggle_published(request, pk):
-    """ Изменяет признак публикации блога"""
+    """Изменяет признак публикации блога"""
     blog = get_object_or_404(Blogs, pk=pk)
     if blog.is_published:
         blog.is_published = False
@@ -102,4 +107,3 @@ def toggle_published(request, pk):
     blog.save()
 
     return redirect(reverse("blogs:blogs_list"))
-
