@@ -1,7 +1,5 @@
-from itertools import product
-
-from PIL.ImageCms import versions
 from django.db import models
+from users.models import User
 
 
 NULLABLE = {"blank": True, "null": True}
@@ -42,6 +40,7 @@ class Product(models.Model):
         auto_now=True, verbose_name="Дата последнего изменения"
     )
     # manufactured_at = models.DateField(verbose_name='Дата производства продукта', help_text='Введите дату производства', **NULLABLE)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Автор', help_text='Укажите владельца', **NULLABLE)
 
     def __str__(self):
         result = f"{self.name}"

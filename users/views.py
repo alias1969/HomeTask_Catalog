@@ -1,11 +1,17 @@
 import secrets
+import string
+import random
+from pyexpat.errors import messages
 
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.views import LoginView, PasswordResetView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView, UpdateView, TemplateView
 
-from users.forms import UserRegisterForms
+from users.forms import UserRegisterForms, UserProfileForm
 from users.models import User
 from config.settings import EMAIL_HOST_USER
 
@@ -18,7 +24,6 @@ class UserCreateView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        print(user)
         user.is_active = False
 
         #генерация токена юзера
@@ -41,8 +46,59 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-class UserLoginView():
+class UserProfileView(UpdateView):
+    """Контроллер профиля пользователя"""
     model = User
+    form_class = UserProfileForm
+    success_url = reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        """Передача объекта в UpdateView"""
+        return self.request.user
+
+
+class UserPasswordResetView(PasswordResetView):
+    """Контроллер сброса пароля"""
+    template_name = 'password_reset.html'
+    form_class = PasswordResetForm
+    success_url = reverse_lazy('users:login')
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        #user = User.objects.get(email=email)
+        user = User.objects.filter(email=email).first()
+        if user is None:
+            return redirect(reverse("users:invalid_email"))
+
+        new_password = User.objects.make_random_password(length=8)
+        user.password = make_password(new_password)
+        print(f'password {new_password}')
+        user.is_active = True
+        user.save()
+
+        try:
+            #отправляем новый пароль на почту пользователю
+            send_mail(
+                subject='Сброс пароля',
+                message=f'Привет! Ваш новый пароль {new_password}',
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[user.email]
+            )
+            print('email sent')
+        except Exception as err:
+            print(f'error: {err}')
+
+        return redirect(reverse("users:login"))
+
+
+class UserInValidEmail(TemplateView):
+    """Контроллер отработки исключения, когда нет пользователя с таким email"""
+    template_name = "invalid_email.html"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["error"] = Contacts.objects.all()
+    #     return context
 
 
 def email_verification(request, token):

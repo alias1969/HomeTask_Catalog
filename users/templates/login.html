@@ -1,7 +1,7 @@
 {% extends 'catalog/base.html' %}
 
 {% block content %}
-<div class="col-12">
+<div class="container">
     <div class="row">
         <div class="col-6">
             <div class="card">
@@ -13,6 +13,8 @@
                             Войти
                         </button>
                     </form>
+                    <p>Создать аккаунт <a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+                    <p>Забыли пароль? <a href="{% url 'users:password_reset' %}">Восстановить пароль</a></p>
                 </div>
             </div>
         </div>
