@@ -1,7 +1,6 @@
 from django.db import models
-from pygments.lexer import default
 
-NULLABLE = {"blank": True, "null": True}
+from catalog.models import NULLABLE
 
 
 class Blogs(models.Model):
