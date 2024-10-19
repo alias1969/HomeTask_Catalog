@@ -1,7 +1,4 @@
 import secrets
-import string
-import random
-from pyexpat.errors import messages
 
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.hashers import make_password
@@ -40,7 +37,7 @@ class UserCreateView(CreateView):
             subject='Подтверждение почты',
             message=f'Привет! Для подтверждения почты перейти по ссылке {url}',
             from_email=EMAIL_HOST_USER,
-            recipient_list=[user.email]
+            recipient_list=[user.email],
         )
 
         return super().form_valid(form)
@@ -65,26 +62,24 @@ class UserPasswordResetView(PasswordResetView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        #user = User.objects.get(email=email)
         user = User.objects.filter(email=email).first()
         if user is None:
             return redirect(reverse("users:invalid_email"))
 
         new_password = User.objects.make_random_password(length=8)
         user.password = make_password(new_password)
-        print(f'password {new_password}')
         user.is_active = True
         user.save()
-
         try:
             #отправляем новый пароль на почту пользователю
             send_mail(
                 subject='Сброс пароля',
                 message=f'Привет! Ваш новый пароль {new_password}',
                 from_email=EMAIL_HOST_USER,
-                recipient_list=[user.email]
+                recipient_list=[user.email],
+                fail_silently = False,
             )
-            print('email sent')
+
         except Exception as err:
             print(f'error: {err}')
 
@@ -94,11 +89,6 @@ class UserPasswordResetView(PasswordResetView):
 class UserInValidEmail(TemplateView):
     """Контроллер отработки исключения, когда нет пользователя с таким email"""
     template_name = "invalid_email.html"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["error"] = Contacts.objects.all()
-    #     return context
 
 
 def email_verification(request, token):
