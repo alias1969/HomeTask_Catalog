@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import AUTH_USER_MODEL, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, EMAIL_USE_TLS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -113,9 +112,9 @@ LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'test1ri'
+EMAIL_HOST_USER = 'test1ri.yandex.ru'
 EMAIL_HOST_PASSWORD = 'kwqjhkrlxybnucgq' #'rPHrADn6'
-EMAIL_USE_SSL = False #True
+EMAIL_USE_SSL = False
 EMAIL_USE_TLS =  False
 
 SERVER_EMAIL = EMAIL_HOST_USER
