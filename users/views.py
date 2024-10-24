@@ -70,6 +70,7 @@ class UserPasswordResetView(PasswordResetView):
         user.password = make_password(new_password)
         user.is_active = True
         user.save()
+        print(new_password)
         try:
             #отправляем новый пароль на почту пользователю
             send_mail(

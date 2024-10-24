@@ -55,10 +55,14 @@
                                 <a class="btn btn-outline-primary" href="{% url 'catalog:product_detail' product.pk %}"
                                    role="button">Открыть</a>
                                 {% if user.is_authenticated %}
+                                {% if perms.catalog.can_edit_is_published and perms.catalog.can_edit_description and perms.catalog.can_edit_category or user == product.owner %}
                                 <a class="btn btn-outline-primary" href="{% url 'catalog:product_update' product.pk %}"
                                    role="button">Редактировать</a>
+                                {% endif %}
+                                {% if user == product.owner %}
                                 <a class="btn btn-outline-primary" href="{% url 'catalog:product_delete' product.pk %}"
                                    role="button">Удалить</a>
+                                {% endif %}
                                 {% endif %}
                             </div>
                         </div>

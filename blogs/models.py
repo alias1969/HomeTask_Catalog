@@ -43,3 +43,4 @@ class Blogs(models.Model):
     class Meta:
         verbose_name = "Блог"
         verbose_name_plural = "Блоги"
+        permissions = [('can_edit', 'Can edit blogs'),]
