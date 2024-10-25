@@ -40,7 +40,13 @@ class Product(models.Model):
         auto_now=True, verbose_name="Дата последнего изменения"
     )
     # manufactured_at = models.DateField(verbose_name='Дата производства продукта', help_text='Введите дату производства', **NULLABLE)
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name='Автор', help_text='Укажите владельца', **NULLABLE)
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name="Автор",
+        help_text="Укажите владельца",
+        **NULLABLE,
+    )
 
     is_published = models.BooleanField(verbose_name="Опубликовано", default=False)
 
@@ -52,9 +58,11 @@ class Product(models.Model):
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
         ordering = ["category", "name"]
-        permissions = [('can_edit_is_published', 'Can edit status published'),
-                       ('can_edit_description', 'Can edit description'),
-                       ('can_edit_category', 'Can edit category')]
+        permissions = [
+            ("can_edit_is_published", "Can edit status published"),
+            ("can_edit_description", "Can edit description"),
+            ("can_edit_category", "Can edit category"),
+        ]
 
     def get_current_version(self):
         return self.versions.filter(is_current_version=True).first()

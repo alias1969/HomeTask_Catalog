@@ -1,6 +1,7 @@
 from audioop import reverse
-from lib2to3.fixes.fix_input import context
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
@@ -53,7 +54,7 @@ class BlogsDetailView(DetailView):
         return object
 
 
-class BlogsCreateView(CreateView):
+class BlogsCreateView(LoginRequiredMixin, CreateView):
     """Страница создания блога"""
 
     model = Blogs
@@ -69,7 +70,7 @@ class BlogsCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogsUpdateView(UpdateView):
+class BlogsUpdateView(LoginRequiredMixin, UpdateView):
     """Страница редактирования блога"""
 
     model = Blogs
@@ -89,13 +90,14 @@ class BlogsUpdateView(UpdateView):
         return reverse("blogs:blogs_detail", args=[self.kwargs.get("pk")])
 
 
-class BlogsDeleteView(DeleteView):
+class BlogsDeleteView(LoginRequiredMixin, DeleteView):
     """Страница удаления блока"""
 
     model = Blogs
     success_url = reverse_lazy("blogs:blogs_list")
 
 
+@login_required
 def toggle_published(request, pk):
     """Изменяет признак публикации блога"""
     blog = get_object_or_404(Blogs, pk=pk)

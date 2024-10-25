@@ -61,7 +61,7 @@ class ProductForm(StyleFormMixin, ModelForm):
 
 
 class ProductModeratorForm(StyleFormMixin, ModelForm):
-    """Форма продукта"""
+    """Форма редактирования продукта для модераторов"""
 
     class Meta:
         model = Product
@@ -71,6 +71,25 @@ class ProductModeratorForm(StyleFormMixin, ModelForm):
             "is_published",
         )
 
+    def clean_name(self):
+        """Нельзя в названии вводить определенные слова"""
+        clean_data = self.cleaned_data["name"]
+
+        for word in FORBIDDEN_WORDS:
+            if word in clean_data:
+                raise ValidationError(f"Нельзя использовать слово {word} в названии")
+
+        return clean_data
+
+    def clean_description(self):
+        """Нельзя в описании вводить определенные слова"""
+        clean_data = self.cleaned_data["description"]
+
+        for word in FORBIDDEN_WORDS:
+            if word in clean_data:
+                raise ValidationError(f"Нельзя использовать слово {word} в описании")
+
+        return clean_data
 
 class VersionForms(StyleFormMixin, ModelForm):
     """Форма Версии продукта"""

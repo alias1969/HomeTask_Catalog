@@ -15,7 +15,7 @@
     </div>
     <div class="col-12">
         <div class="btn-group">
-            {% if perms.blogs.can_edit %}
+            {% if perms.blogs.add_blogs %}
             <a class="btn btn-primary my-2" href="{% url 'blogs:blogs_create' %}" role="button">Добавить
                 новый блог</a>
             {% endif %}
@@ -39,9 +39,13 @@
                 <div class="mb-1 text-muted">Просмотров: {{ object.count_views }}</div>
                 <div class="button-group">
                     <a class="btn btn-link" href="{% url 'blogs:blogs_detail' object.pk %}" role="button">Открыть</a>
-                    {% if perms.blogs.can_edit %}
+                    {% if perms.blogs.change_blogs %}
                     <a class="btn btn-link" href="{% url 'blogs:blogs_update' object.pk %}" role="button">Редактировать</a>
+                    {% endif %}
+                    {% if perms.blogs.delete_blogs %}
                     <a class="btn btn-link" href="{% url 'blogs:blogs_delete' object.pk %}" role="button">Удалить</a>
+                    {% endif %}
+                    {% if perms.blogs.can_publish %}
                     {% if object.is_published %}
                         <a href="{% url 'blogs:toggle_published' object.pk %}">Снять с публикации</a>
                     {% else %}

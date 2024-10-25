@@ -43,19 +43,18 @@ class ProductCreateView(CreateView, LoginRequiredMixin):
 
     def form_valid(self, form):
         product = form.save()
-        #автор = текущий пользователь
+        # автор = текущий пользователь
         user = self.request.user
         product.owner = user
-        #product.save()
+        # product.save()
         return super().form_valid(form)
 
 
-class ProductUpdateView(UpdateView, LoginRequiredMixin):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """Страница редактирования продукта"""
 
     model = Product
     form_class = ProductForm
-    # fields = ("name", "description", "category", "price", "image")
     success_url = reverse_lazy("catalog:home")
 
     def get_context_data(self, **kwargs):
@@ -88,12 +87,14 @@ class ProductUpdateView(UpdateView, LoginRequiredMixin):
 
         if user == self.object.owner:
             return ProductForm
-        elif min(user.has_perm('can_edit_description'),
-                 user.has_perm('can_edit_category'),
-                 user.has_perm('can_edit_is_published')):
+        elif min(
+            user.has_perm("catalog.can_edit_description"),
+            user.has_perm("catalog.can_edit_category"),
+            user.has_perm("catalog.can_edit_is_published"),
+        ):
             return ProductModeratorForm
         else:
-            return PermissionDenied
+            raise PermissionDenied
 
 
 class ProductDeleteView(DeleteView, LoginRequiredMixin):
