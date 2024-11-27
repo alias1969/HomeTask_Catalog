@@ -91,6 +91,7 @@ class ProductModeratorForm(StyleFormMixin, ModelForm):
 
         return clean_data
 
+
 class VersionForms(StyleFormMixin, ModelForm):
     """Форма Версии продукта"""
 
