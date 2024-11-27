@@ -93,6 +93,7 @@ class UserPasswordResetView(PasswordResetView):
 
 class UserInValidEmail(TemplateView):
     """Контроллер отработки исключения, когда нет пользователя с таким email"""
+
     template_name = "invalid_email.html"
 
 
